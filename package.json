@@ -1,7 +1,9 @@
 {
-  "name": "node-example",
-  "version": "0.0.1",
-  "dependencies": {
-    "express": "2.5.0"
-  }
+	"name": "pmas-project",
+	"version": "0.0.1",
+	"dependencies": {
+		"express": "2.5.0",
+		"ejs":	"*",
+		"mysql": "*"
+	}
 }
