@@ -11,7 +11,7 @@ app.get('/', function(request, response) {
 });
 
 app.post('/send_temp', function(request, response) {
-    response.send(request.body.json_data);
+    response.send(request.body.json);
 });
 
 var port = process.env.PORT || 3000;
