@@ -51,7 +51,7 @@ exports.send_temp = function(req, res){
 				res_json = {result: 'OK'};
 			}
 		}
-	};
+	}
 	res.send(JSON.stringify(res_json));
 }
 
