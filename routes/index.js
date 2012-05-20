@@ -45,10 +45,11 @@ exports.send_temp = function(req, res){
 		console.log('Saving current temperature: '+req.body.temp);
 		client.query('INSERT INTO temperature SET temp = ?', [req.body.temp], function(err, result) {
 			if (err){
-				//throw err;
+				throw err;
 				res_json = {result: 'FAIL',
                             		    err_code: 2,
-                            		    err_msg: 'Database error.'};
+                            		    err_msg: 'Database error'};
+				throw err;
 			}
 			else {
 				res_json = {result: 'OK'};
