@@ -2,6 +2,7 @@ function IsNumeric(data){
     return parseFloat(data)==data;
 }
 
+
 var HOST;
 var USERNAME;
 var PASSWORD;
@@ -12,8 +13,6 @@ USERNAME = connect_string_splitted[1].split("//")[1];
 PASSWORD = connect_string_splitted[2].split("@")[0];
 HOST = connect_string_splitted[2].split("@")[1].split("/")[0];
 DATABASE = connect_string_splitted[2].split("@")[1].split("/")[1].split("?")[0];
-
-console.log("db_url: "+process.env.CLEARDB_DATABASE_URL);
 
 var mysql = require('mysql');
 
@@ -28,7 +27,8 @@ var client = mysql.createClient({
 // events by the client
 client.query('USE '+DATABASE);
 
-exports.send_temp = function(req, res){
+
+exports.send_temp = function(req, res, client){
 	res.header("Content-Type", "application/json");
 	var res_json;
 	if (req.body.temp == undefined){
@@ -45,7 +45,7 @@ exports.send_temp = function(req, res){
 		console.log('Saving current temperature: '+req.body.temp);
 		client.query('INSERT INTO temperature SET temp = ?', [req.body.temp], function(err, result) {
 			if (err){
-				throw err;
+				//throw err;
 				res_json = {result: 'FAIL',
                             		    err_code: 2,
                             		    err_msg: 'Database error.'};

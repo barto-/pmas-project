@@ -47,6 +47,7 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+
 //app.get('/', routes.index);
 app.post('/send_temp', routes.send_temp);
 //app.get('/read_temp', routes.read_temp);
