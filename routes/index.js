@@ -52,7 +52,28 @@ exports.send_temp = function(req, res){
 				res_json = {result: 'OK'};
 				res.send(JSON.stringify(res_json));
 			}
+			client.end();
 		});
 	}
 }
+
+exports.read_temp = function(req, res){
+        res.header("Content-Type", "application/json");
+        client.query('SELECT temp, time FROM temperature ORDER BY time DESC LIMIT 0,1', function(err, result) {
+        	if (err){
+                	res_json = {result: 'FAIL',
+                        	    err_code: 2,
+                                    err_msg: 'Database error'};          
+                        res.send(JSON.stringify(res_json));
+                        throw err;
+                }
+                else {
+                	res_json = {temp: result.temp,
+				    time: result.time};
+                	res.send(JSON.stringify(res_json));
+                }
+		client.end();
+	});
+}
+
 

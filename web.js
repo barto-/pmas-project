@@ -12,14 +12,6 @@ app.get('/', function(request, response) {
   response.send('Hello World!');
 });
 
-app.post('/send_temp', function(request, response) {
-    //response.writeHead(200, JSON.stringify({'Content-Type': 'application/json'}));
-    response.header("Content-Type", "application/json");
-    response.send(JSON.stringify({result: 'OK'}));
-    //console.log(JSON.stringify(request.headers));
-    console.log('Current Temperature: '+request.body.temp);
-});
-
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
   console.log("Listening on " + port);
@@ -50,7 +42,7 @@ app.configure('development', function(){
 
 //app.get('/', routes.index);
 app.post('/send_temp', routes.send_temp);
-//app.get('/read_temp', routes.read_temp);
+app.get('/read_temp', routes.read_temp);
 //app.get('/read_multi', routes.read_multi);
 //app.post('/set_sampling', routes.set_sampling);
 //app.get('/get_sampling', routes.get_sampling);
