@@ -68,6 +68,7 @@ exports.read_temp = function(req, res){
                         throw err;
                 }
                 else {
+			console.log(result);
                 	res_json = {temp: result.temp,
 				    time: result.time};
                 	res.send(JSON.stringify(res_json));
