@@ -58,7 +58,7 @@ exports.send_temp = function(req, res){
 
 exports.read_temp = function(req, res){
         res.header("Content-Type", "application/json");
-        client.query('SELECT temp, time FROM temperature ORDER BY time DESC LIMIT 0,1', function(err, result) {
+        client.query('SELECT temp, UNIX_TIMESTAMP(time) FROM temperature ORDER BY time DESC LIMIT 0,1', function(err, result) {
         	if (err){
                 	res_json = {result: 'FAIL',
                         	    err_code: 2,
@@ -67,10 +67,43 @@ exports.read_temp = function(req, res){
                         throw err;
                 }
                 else {
-                	res_json = result[0];
+			res_json = result[0];
                 	res.send(JSON.stringify(res_json));
                 }
 	});
 }
 
-
+/*
+exports.send_temp = function(req, res){
+        res.header("Content-Type", "application/json");
+        var res_json;
+        if (req.body.temp == undefined){
+                res_json = {result: 'FAIL',
+                            err_code: 1,
+                            err_msg: 'Wrong request format'};
+                res.send(JSON.stringify(res_json));
+        }
+        else if (!IsNumeric(req.body.temp)) {
+                res_json = {result: 'FAIL',
+                            err_code: 1,
+                            err_msg: 'Wrong request format'};
+                res.send(JSON.stringify(res_json));
+        }
+        else {
+                console.log('Saving current temperature: '+req.body.temp);
+                client.query('INSERT INTO temperature SET temp = ?', [req.body.temp], function(err, result) {
+                        if (err){
+                                res_json = {result: 'FAIL',
+                                            err_code: 2,
+                                            err_msg: 'Database error'};          
+                                res.send(JSON.stringify(res_json));
+                                throw err;
+                        }
+                        else {
+                                res_json = {result: 'OK'};
+                                res.send(JSON.stringify(res_json));
+                        }
+                });
+        }
+}
+*/
