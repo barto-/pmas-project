@@ -50,8 +50,8 @@ exports.send_temp = function(req, res){
 			else {
 				res_json = {result: 'OK'};
 			}
-		}
-	}
+		};
+	};
 	res.send(JSON.stringify(res_json));
 }
 
