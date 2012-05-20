@@ -28,7 +28,7 @@ var client = mysql.createClient({
 client.query('USE '+DATABASE);
 
 
-exports.send_temp = function(req, res, client){
+exports.send_temp = function(req, res){
 	res.header("Content-Type", "application/json");
 	var res_json;
 	if (req.body.temp == undefined){
