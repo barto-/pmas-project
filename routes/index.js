@@ -34,7 +34,7 @@ exports.send_temp = function(req, res){
 			    err_code: 1,
 			    err_msg: 'Wrong request format'}; 	
 	}
-	else if (!IsNumeric(req.body.temp))
+	else if (!IsNumeric(req.body.temp)) {
 		res_json = {result: 'FAIL',
                             err_code: 1,
                             err_msg: 'Wrong request format'};
