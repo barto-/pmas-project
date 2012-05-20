@@ -58,7 +58,7 @@ exports.send_temp = function(req, res){
 
 exports.read_temp = function(req, res){
         res.header("Content-Type", "application/json");
-        client.query('SELECT temp, UNIX_TIMESTAMP(time) FROM temperature ORDER BY time DESC LIMIT 0,1', function(err, result) {
+        client.query('SELECT temp, UNIX_TIMESTAMP(time) AS time  FROM temperature ORDER BY time DESC LIMIT 0,1', function(err, result) {
         	if (err){
                 	res_json = {result: 'FAIL',
                         	    err_code: 2,
