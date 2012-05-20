@@ -40,7 +40,7 @@ exports.send_temp = function(req, res){
                             err_msg: 'Wrong request format'};
 	}
 	else {
-		client.query('INSERT INTO temperature SET temperature = ?', req.body.temp, function() {
+		client.query('INSERT INTO temperature SET temp = ?', req.body.temp, function() {
 			if (err){
 				throw err;
 				res_json = {result: 'FAIL',
