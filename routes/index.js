@@ -34,12 +34,14 @@ exports.send_temp = function(req, res){
 	if (req.body.temp == undefined){
 		res_json = {result: 'FAIL',
 			    err_code: 1,
-			    err_msg: 'Wrong request format'}; 	
+			    err_msg: 'Wrong request format'};
+		res.send(JSON.stringify(res_json)); 	
 	}
 	else if (!IsNumeric(req.body.temp)) {
 		res_json = {result: 'FAIL',
                             err_code: 1,
                             err_msg: 'Wrong request format'};
+		res.send(JSON.stringify(res_json));
 	}
 	else {
 		console.log('Saving current temperature: '+req.body.temp);
@@ -48,13 +50,14 @@ exports.send_temp = function(req, res){
 				res_json = {result: 'FAIL',
                             		    err_code: 2,
                             		    err_msg: 'Database error'};
+				res.send(JSON.stringify(res_json));
 				throw err;
 			}
 			else {
 				res_json = {result: 'OK'};
+				res.send(JSON.stringify(res_json));
 			}
 		});
 	}
-	res.send(JSON.stringify(res_json));
 }
 
