@@ -49,7 +49,7 @@ exports.send_temp = function(req, res){
 				res_json = {result: 'FAIL',
                             		    err_code: 2,
                             		    err_msg: 'Database error'};
-				throw err;
+				console.log(err);
 			}
 			else {
 				res_json = {result: 'OK'};
