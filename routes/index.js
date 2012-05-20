@@ -52,7 +52,6 @@ exports.send_temp = function(req, res){
 				res_json = {result: 'OK'};
 				res.send(JSON.stringify(res_json));
 			}
-			client.end();
 		});
 	}
 }
@@ -71,7 +70,6 @@ exports.read_temp = function(req, res){
                 	res_json = result[0];
                 	res.send(JSON.stringify(res_json));
                 }
-		client.end();
 	});
 }
 
