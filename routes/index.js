@@ -108,7 +108,8 @@ exports.read_multi = function(req, res){
                                 throw err;
                         }
                         else {
-                                res_json = result;
+                                res_json = {result: 'OK',
+					    samples: result};
                                 res.send(JSON.stringify(res_json));
                         }
                 });
