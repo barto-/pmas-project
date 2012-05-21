@@ -95,7 +95,7 @@ exports.read_multi = function(req, res){
                 res.send(JSON.stringify(res_json));
         }
         else {
-                client.query('SELECT temp, UNIX_TIMESTAMP(time) AS time FROM  temperature WHERE time >= ? AND time <= ?', [req.body.start, req.body.stop], function(err, result) {
+                client.query('SELECT temp, UNIX_TIMESTAMP(time) AS time FROM  temperature HAVING time >= ? AND time <= ?', [req.body.start, req.body.stop], function(err, result) {
                         if (err){
                                 res_json = {result: 'FAIL',
                                             err_code: 2,
