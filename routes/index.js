@@ -2,6 +2,11 @@ function IsNumeric(data){
     return parseFloat(data)==data;
 }
 
+function IsInt(value){
+    var er = /^[0-9]+$/;
+    return ( er.test(value) ) ? true : false;
+}
+
 
 var HOST;
 var USERNAME;
@@ -74,24 +79,23 @@ exports.read_temp = function(req, res){
 }
 
 /*
-exports.send_temp = function(req, res){
+exports.read_multi = function(req, res){
         res.header("Content-Type", "application/json");
         var res_json;
-        if (req.body.temp == undefined){
+        if (req.body.start == undefined || req.body.stop == undefined || req.body.sampling_int == undefined){
                 res_json = {result: 'FAIL',
                             err_code: 1,
                             err_msg: 'Wrong request format'};
                 res.send(JSON.stringify(res_json));
         }
-        else if (!IsNumeric(req.body.temp)) {
+        else if (!IsInt(req.body.start) || !IsInt(req.body.stop) || (req.body.sampling_int != 0 && req.body.sampling_int != 1 && req.body.sampling_int != 2)) {
                 res_json = {result: 'FAIL',
                             err_code: 1,
                             err_msg: 'Wrong request format'};
                 res.send(JSON.stringify(res_json));
         }
         else {
-                console.log('Saving current temperature: '+req.body.temp);
-                client.query('INSERT INTO temperature SET temp = ?', [req.body.temp], function(err, result) {
+                client.query('SELECT temp, UNIX_TIMESTAMP(time) AS time FROM  temperature WHERE time >= ? AND time <= ?', [req.body.start, req.body.stop], function(err, result) {
                         if (err){
                                 res_json = {result: 'FAIL',
                                             err_code: 2,
