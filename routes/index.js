@@ -82,21 +82,20 @@ exports.read_temp = function(req, res){
 exports.read_multi = function(req, res){
         res.header("Content-Type", "application/json");
         var res_json;
-	console.log(req.body);
-        if (req.body.start == undefined || req.body.stop == undefined || req.body.sampling_int == undefined){
+        if (req.params.start == undefined || req.params.stop == undefined || req.params.sampling_int == undefined){
                 res_json = {result: 'FAIL',
                             err_code: 1,
                             err_msg: 'Wrong request format'};
                 res.send(JSON.stringify(res_json));
         }
-        else if (!IsInt(req.body.start) || !IsInt(req.body.stop) || (req.body.sampling_int != 0 && req.body.sampling_int != 1 && req.body.sampling_int != 2)) {
+        else if (!IsInt(req.params.start) || !IsInt(req.params.stop) || (req.params.sampling_int != 0 && req.params.sampling_int != 1 && req.params.sampling_int != 2)) {
                 res_json = {result: 'FAIL',
                             err_code: 1,
                             err_msg: 'Wrong request format'};
                 res.send(JSON.stringify(res_json));
         }
         else {
-                client.query('SELECT temp, UNIX_TIMESTAMP(time) AS time FROM  temperature HAVING time >= ? AND time <= ?', [req.body.start, req.body.stop], function(err, result) {
+                client.query('SELECT temp, UNIX_TIMESTAMP(time) AS time FROM  temperature HAVING time >= ? AND time <= ?', [req.params.start, req.params.stop], function(err, result) {
                         if (err){
                                 res_json = {result: 'FAIL',
                                             err_code: 2,
