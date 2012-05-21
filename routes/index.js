@@ -82,6 +82,7 @@ exports.read_temp = function(req, res){
 exports.read_multi = function(req, res){
         res.header("Content-Type", "application/json");
         var res_json;
+	console.log(req.params);
         if (req.params.start == undefined || req.params.stop == undefined || req.params.sampling_int == undefined){
                 res_json = {result: 'FAIL',
                             err_code: 1,
