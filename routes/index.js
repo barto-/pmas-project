@@ -86,20 +86,20 @@ exports.read_multi = function(req, res){
         var res_json;
 	var query = url.parse(req.url, true).query;
 	console.log(query);
-        if (req.params.start == undefined || req.params.stop == undefined || req.params.sampling_int == undefined){
+        if (query.start == undefined || query.stop == undefined || query.sampling_int == undefined){
                 res_json = {result: 'FAIL',
                             err_code: 1,
                             err_msg: 'Wrong request format'};
                 res.send(JSON.stringify(res_json));
         }
-        else if (!IsInt(req.params.start) || !IsInt(req.params.stop) || (req.params.sampling_int != 0 && req.params.sampling_int != 1 && req.params.sampling_int != 2)) {
+        else if (!IsInt(query.start) || !IsInt(query.stop) || (query.sampling_int != 0 && query.sampling_int != 1 && query.sampling_int != 2)) {
                 res_json = {result: 'FAIL',
                             err_code: 1,
                             err_msg: 'Wrong request format'};
                 res.send(JSON.stringify(res_json));
         }
         else {
-                client.query('SELECT temp, UNIX_TIMESTAMP(time) AS time FROM  temperature HAVING time >= ? AND time <= ?', [req.params.start, req.params.stop], function(err, result) {
+                client.query('SELECT temp, UNIX_TIMESTAMP(time) AS time FROM  temperature HAVING time >= ? AND time <= ?', [query.start, query.stop], function(err, result) {
                         if (err){
                                 res_json = {result: 'FAIL',
                                             err_code: 2,
