@@ -78,7 +78,7 @@ exports.read_temp = function(req, res){
 	});
 }
 
-/*
+
 exports.read_multi = function(req, res){
         res.header("Content-Type", "application/json");
         var res_json;
@@ -104,10 +104,10 @@ exports.read_multi = function(req, res){
                                 throw err;
                         }
                         else {
-                                res_json = {result: 'OK'};
+                                res_json = result;
                                 res.send(JSON.stringify(res_json));
                         }
                 });
         }
 }
-*/
+
