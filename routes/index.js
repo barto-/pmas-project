@@ -74,7 +74,8 @@ exports.read_temp = function(req, res){
                         throw err;
                 }
                 else {
-                	res.send(JSON.stringify({result: 'OK', result[0]}));
+					res_json=result[0];
+                	res.send(JSON.stringify({result: 'OK', res_json}));
                 }
 	});
 }
@@ -159,7 +160,8 @@ exports.get_sampling = function(req, res){
                         throw err;
                 }
                 else {
-                	res.send(JSON.stringify({result: 'OK', result[0]}));
+					res_json=result[0];
+                	res.send(JSON.stringify({result: 'OK', res_json}));
                 }
 	});
 }
