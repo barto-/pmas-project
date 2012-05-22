@@ -64,22 +64,6 @@ exports.send_temp = function(req, res){
 }
 
 exports.read_temp = function(req, res){
-        res.header("Content-Type", "application/json");
-        client.query('SELECT temp, UNIX_TIMESTAMP(time) AS time  FROM temperature ORDER BY time DESC LIMIT 0,1', function(err, result) {
-        	if (err){
-                	res_json = {result: 'FAIL',
-                        	    err_code: 2,
-                                    err_msg: 'Database error'};          
-                        res.send(JSON.stringify(res_json));
-                        throw err;
-                }
-                else {
-			res_json = result[0];
-                	res.send(JSON.stringify(res_json));
-                }
-	});
-}
-
 
 exports.read_multi = function(req, res){
         res.header("Content-Type", "application/json");
@@ -116,3 +100,36 @@ exports.read_multi = function(req, res){
         }
 }
 
+exports.send_temp = function(req, res){
+	res.header("Content-Type", "application/json");
+	var res_json;
+	var samp_t=['1 m', '1 h', '1 d'];
+	if (req.body.sampling_int == undefined){
+		res_json = {result: 'FAIL',
+			    err_code: 1,
+			    err_msg: 'Wrong request format'};
+		res.send(JSON.stringify(res_json)); 	
+	}
+	else if (req.body.sampling_int != 0 && req.body.sampling_int != 1 && req.body.sampling_int != 2) {
+		res_json = {result: 'FAIL',
+                            err_code: 1,
+                            err_msg: 'Wrong request format'};
+		res.send(JSON.stringify(res_json));
+	}
+	else {
+		console.log('Setting sampling time to: '+samp_t[req.body.sampling_int]);
+		client.query('UPDATE TABLE sampling_int SET sampling = ?', [req.body.sampling_int], function(err, result) {
+			if (err){
+				res_json = {result: 'FAIL',
+                            		    err_code: 2,
+                            		    err_msg: 'Database error'};
+				res.send(JSON.stringify(res_json));
+				throw err;
+			}
+			else {
+				res_json = {result: 'OK'};
+				res.send(JSON.stringify(res_json));
+			}
+		});
+	}
+}

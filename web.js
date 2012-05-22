@@ -44,7 +44,7 @@ app.configure('development', function(){
 app.post('/send_temp', routes.send_temp);
 app.get('/read_temp', routes.read_temp);
 app.get('/read_multi', routes.read_multi);
-//app.post('/set_sampling', routes.set_sampling);
+app.post('/set_sampling', routes.set_sampling);
 //app.get('/get_sampling', routes.get_sampling);
 
 var port = process.env.PORT || 3000;
