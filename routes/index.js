@@ -133,7 +133,7 @@ exports.set_sampling = function(req, res){
 	}
 	else {
 		console.log('Setting sampling time to: '+samp_t[req.body.sampling_int]);
-		client.query("UPDATE sampling_int SET sampling='?' WHERE id=1;", [req.body.sampling_int], function(err, result) {
+		client.query('UPDATE sampling_int SET sampling=\'?\' WHERE id=1;', [req.body.sampling_int], function(err, result) {
 			if (err){
 				res_json = {result: 'FAIL',
                             		    err_code: 2,
