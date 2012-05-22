@@ -162,7 +162,7 @@ exports.get_sampling = function(req, res){
                 else {
 					res_json = result[0];
 					console.log(res_json);
-                	res.send(JSON.stringify(res_json));
+                	res.send(JSON.stringify({result: 'OK', res_json}));
                 }
 	});
 }
