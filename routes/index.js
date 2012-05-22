@@ -74,8 +74,7 @@ exports.read_temp = function(req, res){
                         throw err;
                 }
                 else {
-			res_json = result[0];
-                	res.send(JSON.stringify(res_json));
+                	res.send(JSON.stringify({result: 'OK', result[0]}));
                 }
 	});
 }
@@ -147,4 +146,20 @@ exports.set_sampling = function(req, res){
 			}
 		});
 	}
+}
+
+exports.get_sampling = function(req, res){
+        res.header("Content-Type", "application/json");
+        client.query('SELECT sampling FROM sampling_int WHERE id = 1', function(err, result) {
+        	if (err){
+                	res_json = {result: 'FAIL',
+                        	    err_code: 2,
+                                    err_msg: 'Database error'};          
+                        res.send(JSON.stringify(res_json));
+                        throw err;
+                }
+                else {
+                	res.send(JSON.stringify({result: 'OK', result[0]}));
+                }
+	});
 }
