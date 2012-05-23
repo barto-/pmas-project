@@ -63,6 +63,7 @@ exports.send_temp = function(req, res){
 				for (var i=0; i<maxit; i++){
 					q+='(NULL, '+ req.body.temp +', DATE_ADD(NOW(), INTERVAL -'+ maxit+i-1 +' MINUTE))'+(i!=maxit-1?', ':'');
 				}
+				console.log(q);
 				client.query(q, function(err, result) {
 					if (err){
 						res_json = {result: 'FAIL',
