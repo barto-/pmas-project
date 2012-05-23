@@ -1,1 +1,70 @@
-PMAS Project
+PMAS Project APIs
+server url: http://pmas-project.herokuapp.com
+use "Content-Type: application/json" in your HTTP POST request headers.
+ 
+Send temperature sample (Arduino):
+METHOD: POST
+ URL: /send_temp
+REQUEST FORMAT:
+{temp: temperature}
+ 
+temperature is the temperature sample.
+ 
+RESPONSE FORMAT:
+{result: OK}
+{result: FAIL}
+ 
+Read instantaneous temperature (Android, HTML5)
+METHOD: GET
+URL: /read_temp
+RESPONSE FORMAT:
+{result 'OK', temp: temperature,
+time: time}
+ 
+Read multiple samples (Android, HTML5)
+METHOD: GET
+URL: /read_multi?start=unix_time&stop=unix_time&sampling_int=s
+ 
+s==0 => minute
+s==1 => hour
+s==2 => day
+RESPONSE FORMAT:
+{result: 'OK',
+samples: [{temp: temp1, time: unix_timestamp1}, {temp: temp2, time: unix_timestamp2}, ...]}
+ 
+{result: FAIL}
+ 
+Set sampling interval (Android, HTML5)
+METHOD: POST
+URL: /set_sampling
+REQUEST FORMAT:
+{sampling_int: s}
+ 
+s==0 => minute
+s==1 => hour
+s==2 => day
+RESPONSE FORMAT:
+{result: OK}
+{result: FAIL}
+ 
+Get sampling interval (Arduino)
+METHOD: GET
+URL: /get_sampling
+RESPONSE FORMAT:
+{result: 'OK', sampling_int: s}
+ 
+s==0 => minute
+s==1 => hour
+s==2 => day
+
+-------------------------------
+
+The server, in case of error, will send responses in this format:
+{result: 'FAIL',
+error_code: error_code,
+error_msg: 'Human-readable error message'}
+ 
+Error codes:
+1 => Wrong request format
+2 => Database error
+3 => Unknown error
