@@ -47,7 +47,7 @@ exports.send_temp = function(req, res){
 	}
 	else {
 		console.log('Saving current temperature: '+req.body.temp);
-		client.query('INSERT INTO temperature SET temp = ?, sampling = (SELECT sampling FROM sampling_int WHERE id=1)', [req.body.temp], function(err, result) {
+		client.query('SELECT sampling FROM sampling_int WHERE id=1', function(err, result) {
 			if (err){
 				res_json = {result: 'FAIL',
                             		    err_code: 2,
@@ -56,8 +56,26 @@ exports.send_temp = function(req, res){
 				throw err;
 			}
 			else {
-				res_json = {result: 'OK'};
-				res.send(JSON.stringify(res_json));
+				var sampling_int = result[0].sampling;
+				var samp_t = [60, 60*60, 60*60*24];
+				var q='INSERT INTO temperature(id, temp, time) VALUES ';
+				var maxit=0;
+				for (var i=0; i<maxit=samp_t[sampling_int]/60; i++){
+					q+='(NULL, '+ req.body.temp +', DATE_ADD(NOW(), INTERVAL 1 MINUTE))'+(i!=maxit-1?', ':'');
+				}
+				client.query(q, function(err, result) {
+					if (err){
+						res_json = {result: 'FAIL',
+		                          	err_code: 2,
+		                            err_msg: 'Database error'};
+						res.send(JSON.stringify(res_json));
+						throw err;
+					}
+					else {
+						res_json = {result: 'OK'};
+						res.send(JSON.stringify(res_json));
+					}
+				});
 			}
 		});
 	}
@@ -102,7 +120,7 @@ exports.read_multi = function(req, res){
 			var tol = 10; //10 sec tolerance
 			q='SELECT temp1 AS temp, time1 AS time FROM (SELECT t1.id AS id1, t2.id AS id2, t1.temp AS temp1, t2.temp AS temp2, UNIX_TIMESTAMP(t1.time) AS time1, UNIX_TIMESTAMP(t2.time) AS time2 FROM temperature AS t1, temperature AS t2 HAVING time1 >= ? AND time1 <= ? AND time2 >= ? AND time2 <= ? AND id2 >= id1 + 10 AND id2 <= id1 + ? AND time2 - time1 >= ? AND time2-time1 <= ?) AS dummy';
                 client.query(q, [query.start, query.stop, query.start, query.stop, 10*samp_t[query.sampling_int]/60, samp_t[query.sampling_int]-tol, samp_t[query.sampling_int]+tol], function(err, result) {
-                        if (err){
+						if (err){
                                 res_json = {result: 'FAIL',
                                             err_code: 2,
                                             err_msg: 'Database error'};          
@@ -111,7 +129,7 @@ exports.read_multi = function(req, res){
                         }
                         else {
                                 res_json = {result: 'OK',
-					    samples: result};
+					    					samples: result};
                                 res.send(JSON.stringify(res_json));
                         }
                 });
