@@ -81,8 +81,8 @@ exports.read_temp = function(req, res){
 }
 
 exports.read_multi = function(req, res){
-        res.header("Content-Type", "application/json");
-        var res_json;
+	res.header("Content-Type", "application/json");
+	var res_json;
 	var query = url.parse(req.url, true).query;
 	console.log(query);
         if (query.start == undefined || query.stop == undefined || query.sampling_int == undefined){
@@ -98,7 +98,10 @@ exports.read_multi = function(req, res){
                 res.send(JSON.stringify(res_json));
         }
         else {
-                client.query('SELECT temp, UNIX_TIMESTAMP(time) AS time FROM  temperature HAVING time >= ? AND time <= ?', [query.start, query.stop], function(err, result) {
+			var samp_t = [60, 60*60, 60*60*24]; // sampling intervals
+			var tol = 10; //10 sec tolerance
+			q='SELECT temp1 AS temp, time1 AS time FROM (SELECT t1.id AS id1, t2.id AS id2, t1.temp AS temp1, t2.temp AS temp2, UNIX_TIMESTAMP(t1.time) AS time1, UNIX_TIMESTAMP(t2.time) AS time2 FROM temperature AS t1, temperature AS t2 HAVING time1 >= ? AND time1 <= ? AND time2 >= ? AND time2 <= ? AND id2 >= id1 + 10 AND id2 <= id1 + ? AND time2 - time1 >= ? AND time2-time1 <= ?) AS dummy';
+                client.query(q, [query.start, query.stop, query.start, query.stop, 10*samp_t[query.sampling_int]/60, samp_t[query.sampling_int]-tol, samp_t[query.sampling_int]+tol], function(err, result) {
                         if (err){
                                 res_json = {result: 'FAIL',
                                             err_code: 2,
