@@ -87,13 +87,21 @@ exports.read_temp = function(req, res){
         	if (err){
                 	res_json = {result: 'FAIL',
                         	    err_code: 2,
-                                    err_msg: 'Database error'};          
+                               	err_msg: 'Database error'};          
                         res.send(JSON.stringify(res_json));
                         throw err;
                 }
                 else {
-			res_json = {result: 'OK', temp: result[0].temp, time: result[0].time};
-                	res.send(JSON.stringify(res_json));
+					if (result.length == 0){
+						res_json = {result: 'FAIL', 
+									err_code: 3,
+									err_msg: 'No temperature samples'};
+						res.send(JSON.stringify(res_json));
+					}
+					else {
+						res_json = {result: 'OK', temp: result[0].temp, time: result[0].time};
+                		res.send(JSON.stringify(res_json));
+					}
                 }
 	});
 }
