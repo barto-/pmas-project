@@ -63,8 +63,6 @@ exports.send_temp = function(req, res){
 				for (var i=0; i<maxit; i++){
 					q=q +'(NULL, '+ req.body.temp +', DATE_ADD(NOW(), INTERVAL -'+ (maxit-i-1) +' MINUTE))'+(i!=maxit-1?', ':'');
 				}
-				console.log(q);
-				console.log(maxit);
 				client.query(q, function(err, result) {
 					if (err){
 						res_json = {result: 'FAIL',
@@ -120,8 +118,8 @@ exports.read_multi = function(req, res){
         else {
 			var samp_t = [60, 60*60, 60*60*24]; // sampling intervals
 			var tol = 10; //10 sec tolerance
-			q='SELECT temp1 AS temp, time1 AS time FROM (SELECT t1.id AS id1, t2.id AS id2, t1.temp AS temp1, t2.temp AS temp2, UNIX_TIMESTAMP(t1.time) AS time1, UNIX_TIMESTAMP(t2.time) AS time2 FROM temperature AS t1, temperature AS t2 HAVING time1 >= ? AND time1 <= ? AND time2 >= ? AND time2 <= ? AND id2 >= id1 + 10 AND id2 <= id1 + ? AND time2 - time1 >= ? AND time2-time1 <= ?) AS dummy';
-                client.query(q, [query.start, query.stop, query.start, query.stop, 10*samp_t[query.sampling_int]/60, samp_t[query.sampling_int]-tol, samp_t[query.sampling_int]+tol], function(err, result) {
+			q='SELECT temp, UNIX_TIMESTAMP(time) FROM temperature WHERE time >= ? AND time <= ? AND id % ? = (SELECT id FROM temperature WHERE UNIX_TIMESTAMP(time) >= ? LIMIT 1) % ?';
+                client.query(q, [query.start, query.stop, 10*samp_t[query.sampling_int]/60, query.start, 10*samp_t[query.sampling_int]/60], function(err, result) {
 						if (err){
                                 res_json = {result: 'FAIL',
                                             err_code: 2,
