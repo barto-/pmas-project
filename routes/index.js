@@ -59,9 +59,9 @@ exports.send_temp = function(req, res){
 				var sampling_int = result[0].sampling;
 				var samp_t = [60, 60*60, 60*60*24];
 				var q='INSERT INTO temperature(id, temp, time) VALUES ';
-				var maxit=0;
-				for (var i=0; i<maxit=samp_t[sampling_int]/60; i++){
-					q+='(NULL, '+ req.body.temp +', DATE_ADD(NOW(), INTERVAL 1 MINUTE))'+(i!=maxit-1?', ':'');
+				var maxit=samp_t[sampling_int]/60;
+				for (var i=0; i<maxit; i++){
+					q+='(NULL, '+ req.body.temp +', DATE_ADD(NOW(), INTERVAL -'+ maxit+i-1 +' MINUTE))'+(i!=maxit-1?', ':'');
 				}
 				client.query(q, function(err, result) {
 					if (err){
