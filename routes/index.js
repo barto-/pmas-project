@@ -92,7 +92,7 @@ exports.read_temp = function(req, res){
                         throw err;
                 }
                 else {
-			res_json = {result: 'OK', temp: result[0].temp};
+			res_json = {result: 'OK', temp: result[0].temp, time: result[0].time};
                 	res.send(JSON.stringify(res_json));
                 }
 	});
