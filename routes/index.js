@@ -61,7 +61,7 @@ exports.send_temp = function(req, res){
 				var q='INSERT INTO temperature(id, temp, time) VALUES ';
 				var maxit=samp_t[sampling_int]/60;
 				for (var i=0; i<maxit; i++){
-					q+=('(NULL, '+ req.body.temp +', DATE_ADD(NOW(), INTERVAL -'+ maxit+i-1 +' MINUTE))'+(i!=maxit-1?', ':''));
+					q=q +'(NULL, '+ req.body.temp +', DATE_ADD(NOW(), INTERVAL -'+ maxit+i-1 +' MINUTE))'+(i!=maxit-1?', ':'');
 				}
 				console.log(q);
 				console.log(maxit);
