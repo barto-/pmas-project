@@ -111,6 +111,9 @@ exports.read_multi = function(req, res){
 	var res_json;
 	var query = url.parse(req.url, true).query;
 	console.log(query);
+	console.log("start:"+query.start);
+	console.log("stop:"+query.stop);
+	console.log("sampling_int:"+query.sampling_int);
         if (query.start == undefined || query.stop == undefined || query.sampling_int == undefined){
                 res_json = {result: 'FAIL',
                             err_code: 1,
