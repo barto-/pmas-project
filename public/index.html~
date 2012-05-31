@@ -29,7 +29,7 @@ function TempNow()
 		cache: false,
 		success: function (response) {	
 		
-		   $("#currenttemp").text(response);	
+		   $("#idd").text(response);	
 		}		
 	});
 }
@@ -60,7 +60,7 @@ function SetSample(s)
     <input type="button" value="1 hour Temp graph" onclick=GetSamples(1)/><br>
     <input type="button" value="1 day Temp set" onclick=GetSamples(2)/>
     <input type="button" value="1 day Temp graph" onclick=GetSamples((2)/><br>
-<div id="currenttemp"></div>
+<div id="idd"></div>
 
 
 
