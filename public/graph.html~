@@ -1,12 +1,12 @@
 
-
+//for the graph.
 
 <!DOCTYPE html>
 <html>
     <head>
         <title>1 hour Line Graph</title>
         <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
-        <script> //for the graph.
+        <script>
             var graph;
             var xPadding = 30;
             var yPadding = 30;
