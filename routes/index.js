@@ -111,6 +111,7 @@ exports.read_multi = function(req, res){
 	var res_json;
 	var query = url.parse(req.url, true).query;
 	console.log(query);
+
         if (query.start == undefined || query.stop == undefined || query.sampling_int == undefined){
                 res_json = {result: 'FAIL',
                             err_code: 1,
@@ -126,8 +127,9 @@ exports.read_multi = function(req, res){
         else {
 			var samp_t = [60, 60*60, 60*60*24]; // sampling intervals
 			var tol = 10; //10 sec tolerance
-			q='SELECT temp, UNIX_TIMESTAMP(time) AS time FROM temperature WHERE time >= ? AND time <= ? AND id % ? = (SELECT id FROM temperature WHERE UNIX_TIMESTAMP(time) >= ? LIMIT 1) % ?';
-                client.query(q, [query.start, query.stop, 10*samp_t[query.sampling_int]/60, query.start, 10*samp_t[query.sampling_int]/60], function(err, result) {
+			q='SELECT temp, UNIX_TIMESTAMP(time) AS time FROM temperature WHERE time >= ? AND time <= ? AND id % ? = ((SELECT id FROM temperature WHERE UNIX_TIMESTAMP(time) >= ? LIMIT 1) % ?)';
+                console.log("mod:"+10*samp_t[query.sampling_int]/60);
+				client.query(q, [query.start, query.stop, 10*samp_t[query.sampling_int]/60, query.start, 10*samp_t[query.sampling_int]/60], function(err, result) {
 						if (err){
                                 res_json = {result: 'FAIL',
                                             err_code: 2,
